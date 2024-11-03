@@ -65,7 +65,7 @@ class ProductoController extends Controller
     }
 
     /* Endpoint para modificar producto */
-    public function update(Request $request, $usuario_id){
+    public function update(Request $request, $producto_id){
         try{
             //validar campos requeridos
             $validacion = Validator::make($request->all(),[
@@ -125,31 +125,79 @@ class ProductoController extends Controller
         }
     }
 
-    /* Endpoin para buscar producto */
-    public function find($producto_id){
-        try{
-            //buscar producto
-            $producto = Producto::find($producto_id);
-            if($producto){
-                $datos = Producto::select('producto.producto_id','producto.restaurante_id','producto.categoria_id','producto.menu_id','producto.nombre',
-                'producto.precio','producto.descripcion','produccto.imagen')
-                ->join('restaurantes','=','producto.restaurante_id','restaurantes.restaurante_id')
-                ->join('categorias','=','producto.categoria_id','categorias.categorias_id')
-                ->join('menus','=','producto.menus_id','menus.menu_id')
-                ->where('producto.producto_id','=', $producto_id)
-                ->get();
+    
+     /* Endpoin para buscar producto */
+    public function find2($producto_id) {
+        try {
+            // buscar producto
+            $producto = Producto::where('producto_id', $producto_id)->first();
+            if ($producto) {
+                $datos = Producto::select(
+                    'producto.producto_id',
+                    'producto.restaurante_id',
+                    'producto.categoria_id',
+                    'producto.menu_id',
+                    'producto.nombre',
+                    'producto.precio',
+                    'producto.descripcion',
+                    'producto.imagen'
+                )
+                ->join('restaurantes', 'restaurantes.restaurante_id', '=', 'producto.restaurante_id')
+                ->join('categorias', 'categorias.categoria_id', '=', 'producto.categoria_id')
+                ->join('menus', 'menus.menu_id', '=', 'producto.menu_id')
+                ->where('producto.producto_id', '=', $producto_id)
+                ->first();
+                
                 return response()->json([
                     'code' => 200,
-                    'data' => $datos[0]
-                ],200);
-            }else{
+                    'data' => $datos
+                ], 200);
+            } else {
                 return response()->json([
                     'code' => 404,
                     'data' => 'Producto no encontrado'
-                ],404);
+                ], 404);
             }
-        }catch(\Throwable $th){
-            return response()->json($th->getMessage(),500);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
+        }
+    }
+
+
+    /* Endpoin para buscar producto */
+    public function find($producto_id) {
+        try {
+            // buscar producto
+            $producto = Producto::where('producto_id', $producto_id)->first();
+            if ($producto) {
+                $datos = Producto::select(
+                    'producto.producto_id',
+                    'producto.restaurante_id',
+                    'producto.categoria_id',
+                    'producto.menu_id',
+                    'producto.nombre',
+                    'producto.precio',
+                    'producto.descripcion',
+                    'producto.imagen'
+                )
+                ->join('restaurantes', 'restaurantes.restaurante_id', '=', 'producto.restaurante_id')
+                ->join('categorias', 'categorias.categoria_id', '=', 'producto.categoria_id')
+                ->join('menus', 'menus.menu_id', '=', 'producto.menu_id')
+                ->where('producto.producto_id', '=', $producto_id)
+                ->first();
+                
+                return response()->json([
+                    'code' => 200,
+                    'data' => $datos
+                ], 200);
+            } else {
+                return response()->json([
+                    'code' => 404,
+                    'data' => 'Producto no encontrado'
+                ], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservas;
 use Illuminate\Http\Request;
-use Illuminate\Sopport\Focades\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ReservasController extends Controller
 {
@@ -27,14 +27,16 @@ class ReservasController extends Controller
             return response()->json($th->getMessage(),500);
         }
     }
+
+
     /* Enpoint Para  insertar reservas */
     public function insertar(Request $request){
         try{
             //Validar campos de la tabla reservas
             $validacion = Validator::make($request->all(),[
-                'reserva_id' => 'required',
+               /*  'reserva_id' => 'required', */
                 'usuario_id' => 'required',
-                'restaurantre_id' => 'required',
+                'restaurante_id' => 'required',
                 'fecha_reserva' => 'required',
                 'hora_reserva' => 'required',
                 'numero_personas' => 'required',
@@ -62,9 +64,9 @@ class ReservasController extends Controller
         try{
             //validar campos requeridos
             $validacion = Validator::make($request->all(),[
-                'reserva_id' => 'required',
+                /* 'reserva_id' => 'required', */
                 'usuario_id' => 'required',
-                'restaurantre_id' => 'required',
+                'restaurante_id' => 'required',
                 'fecha_reserva' => 'required',
                 'hora_reserva' => 'required',
                 'numero_personas' => 'required',

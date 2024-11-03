@@ -9,5 +9,7 @@ class Producto extends Model
 {
     use HasFactory;
     protected $table = 'Producto';
+    protected $primaryKey = 'producto_id';
     protected $fillable = ['producto_id','restaurante_id','categoria_id','menu_id','nombre','precio','descripcion','imagen'];
+    public $timestamps = true;
 }

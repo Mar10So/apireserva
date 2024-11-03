@@ -9,5 +9,7 @@ class Restaurante extends Model
 {
     use HasFactory;
     protected $table = 'Restaurantes';
-    protected $fillable =['restaurante_id','admin_id','nombre','direccion','ciudad','tipo_cocina','rango_cocina','rango_precios','calificacion_promedio','capacidad','horario_apertura','hoario_cierre','email','telefono','imagen'];
+    protected $primaryKey = 'restaurante_id'; // Definir la clave primaria
+    protected $fillable =['restaurante_id','admin_id','nombre','direccion','ciudad','tipo_cocina','rango_cocina','rango_precios','capacidad','horario_apertura','horario_cierre','email','telefono','imagen'];
+    public $timestamps = true;
 }

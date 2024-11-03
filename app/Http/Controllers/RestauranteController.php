@@ -39,7 +39,6 @@ class RestauranteController extends Controller
                 'ciudad' => 'required',
                 'tipo_cocina' => 'required',
                 'rango_precios' => 'required',
-                'calificacion_promedio' => 'required',
                 'capacidad' => 'required',
                 'horario_apertura' => 'required',
                 'horario_cierre' => 'required',
@@ -65,51 +64,57 @@ class RestauranteController extends Controller
         }
     }
 
-    /* Endpoint para modificar Restaurante */
-    public function update(Request $request, $restaurante_id){
-        try{
-            //validar campos requeridos
-            $validacion = Validator::make($request->all(),[
-                /* 'restaurante_id' => 'required', */
-                'admin_id' => 'required',
-                'nombre' => 'required',
-                'direccion' => 'required',
-                'ciudad' => 'required',
-                'tipo_cocina' => 'required',
-                'rango_precios' => 'required',
-                'calificacion_promedio' => 'required',
-                'capacidad' => 'required',
-                'horario_apertura' => 'required',
-                'horario_cierre' => 'required',
-                'email' => 'required',
-                'telefono' => 'required',
-                'imagen' => 'required',
-            ]);
-            //su la respuesta esta mala 
-            if($validacion -> fails()){
-                return reponse()->json([
-                    'code' => 400,
-                    'data' => $validacion->messages()
-                ],400);
-            }else{
-                $restaurantes = Restaurante::find($restaurante_id);
-                if($restaurantes){
-                    $restaurantes->update($request->all());
-                    return response()->json([
-                    'code' => 200,
-                    'data' => 'Restaurante Actulizado'
-                    ],200);
-                }else{
-                    return response()->json([
-                        'code' => 204,
-                        'data' => 'Restaurante no encontrado'
-                    ],204);
-                }
-            }
-        }catch(\Throwable $th){
-            return response()->json($th->getMessage(),500);
+
+/* Endpoint para modificar Restaurante */
+public function update(Request $request, $restaurante_id){
+    try {
+        // Validar campos requeridos
+        $validacion = Validator::make($request->all(), [
+            'admin_id' => 'required',
+            'nombre' => 'required',
+            'direccion' => 'required',
+            'ciudad' => 'required',
+            'tipo_cocina' => 'required',
+            'rango_precios' => 'required',
+            'capacidad' => 'required|integer',
+            'horario_apertura' => 'required',
+            'horario_cierre' => 'required',
+            'email' => 'required|email',
+            'telefono' => 'required',
+            'imagen' => 'required',
+        ]);
+
+        if ($validacion->fails()) {
+            return response()->json([
+                'code' => 400,
+                'data' => $validacion->messages()
+            ], 400);
         }
+
+        // Buscar el restaurante por ID
+        $restaurante = Restaurante::where('restaurante_id', $restaurante_id)->first();
+
+        if ($restaurante) {
+            $restaurante->update($request->all());
+            return response()->json([
+                'code' => 200,
+                'data' => 'Restaurante actualizado'
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 404,
+                'data' => 'Restaurante no encontrado'
+            ], 404);
+        }
+    } catch (\Throwable $th) {
+        return response()->json([
+            'code' => 500,
+            'data' => 'Error en la modificación: ' . $th->getMessage()
+        ], 500);
     }
+}
+
+
 
     /* Endpoint para eliminar Restaurante */
     public function delete($restaurante_id){
@@ -132,30 +137,86 @@ class RestauranteController extends Controller
         }
     }
 
-    /* Endpoin para buscar restaurante */
-    public function find($restaurnate_id){
-        try{
-            //buscar restaurante
-            $restaurantes = Restaurante::find($restaurante_id);
-            if($restaurantes){
-                $datos = Restaurante::select('restaurantes.restaurante_id','restaurantes.admin_id','restaurantes.nombre','restaurantes.direccion',
-                'restaurantes.ciudad','restaurantes.tipo_cocina','restaurantes.rango_precios','restaurantes.calificacion_promedio',
-                'restaurantes.capacidad','restaurantes.horario_apertura','restaurantes.horario_cierre','restaurantes.email','restaurantes.telefono','restaurantes.imagen')
-                ->join('administracion_restaurate','restaurantes.admin_id','=','administracion_restaurante.admin_id')
-                ->where('resaturantes.restaurante_id','=', $restaurante_id)
-                ->get();
+
+    //Metodo para buscar restaurante por id 
+    public function find2($restaurante_id) {
+        try {
+            // buscar restaurante
+            $restaurante = Restaurante::where('restaurante_id', $restaurante_id)->first(); // Usa la clave primaria correcta
+            if ($restaurante) {
+                $datos = Restaurante::select(
+                    'restaurantes.restaurante_id',
+                    'restaurantes.admin_id',
+                    'restaurantes.nombre',
+                    'restaurantes.direccion',
+                    'restaurantes.ciudad',
+                    'restaurantes.tipo_cocina',
+                    'restaurantes.rango_precios',
+                    'restaurantes.capacidad',
+                    'restaurantes.horario_apertura',
+                    'restaurantes.horario_cierre',
+                    'restaurantes.email',
+                    'restaurantes.telefono',
+                    'restaurantes.imagen'
+                )
+                ->join('administracion_restaurante', 'restaurantes.admin_id', '=', 'administracion_restaurante.admin_id')
+                ->where('restaurantes.restaurante_id', '=', $restaurante_id)
+                ->first(); 
+    
                 return response()->json([
                     'code' => 200,
-                    'data' => $datos[0]
-                ],200);
-            }else{
+                    'data' => $datos
+                ], 200);
+            } else {
                 return response()->json([
                     'code' => 404,
-                    'data' => 'Restaurantes no encontrado'
-                ],404);
+                    'data' => 'Restaurante no encontrado'
+                ], 404);
             }
-        }catch(\Throwable $th){
-            return response()->json($th->getMessage(),500);
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
         }
     }
+    
+
+    /* Endpoin para buscar restaurante */
+    public function find($restaurante_id) {
+        try {
+            // buscar restaurante
+            $restaurante = Restaurante::where('restaurante_id', $restaurante_id)->first(); // Usa la clave primaria correcta
+            if ($restaurante) {
+                $datos = Restaurante::select(
+                    'restaurantes.restaurante_id',
+                    'restaurantes.admin_id',
+                    'restaurantes.nombre',
+                    'restaurantes.direccion',
+                    'restaurantes.ciudad',
+                    'restaurantes.tipo_cocina',
+                    'restaurantes.rango_precios',
+                    'restaurantes.capacidad',
+                    'restaurantes.horario_apertura',
+                    'restaurantes.horario_cierre',
+                    'restaurantes.email',
+                    'restaurantes.telefono',
+                    'restaurantes.imagen'
+                )
+                ->join('administracion_restaurante', 'restaurantes.admin_id', '=', 'administracion_restaurante.admin_id')
+                ->where('restaurantes.restaurante_id', '=', $restaurante_id)
+                ->first(); 
+    
+                return response()->json([
+                    'code' => 200,
+                    'data' => $datos
+                ], 200);
+            } else {
+                return response()->json([
+                    'code' => 404,
+                    'data' => 'Restaurante no encontrado'
+                ], 404);
+            }
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage(), 500);
+        }
+    }
+    
 }

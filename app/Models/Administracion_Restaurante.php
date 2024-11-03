@@ -9,5 +9,7 @@ class Administracion_Restaurante extends Model
 {
     use HasFactory;
     protected $table = 'Administracion_Restaurante';
-    protected $fillable = ['admin_id','nombre_admin','email','pasword','rol'];
+    protected $fillable = ['admin_id','nombre_usuario','email','pasword','rol'];
+    protected $primaryKey = 'admin_id'; // Definir la clave primaria
+    public $timestamps = true;
 }
