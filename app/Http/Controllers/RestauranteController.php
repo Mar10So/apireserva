@@ -34,6 +34,7 @@ class RestauranteController extends Controller
             $validacion = Validator::make($request->all(),[
                 /* 'restaurante_id' => 'required', */
                 'admin_id' => 'required',
+                'id' => 'required',/* Es la llave foranea del user */
                 'nombre' => 'required',
                 'direccion' => 'required',
                 'ciudad' => 'required',
@@ -71,6 +72,7 @@ public function update(Request $request, $restaurante_id){
         // Validar campos requeridos
         $validacion = Validator::make($request->all(), [
             'admin_id' => 'required',
+            'id' => 'required',
             'nombre' => 'required',
             'direccion' => 'required',
             'ciudad' => 'required',
@@ -146,7 +148,7 @@ public function update(Request $request, $restaurante_id){
             if ($restaurante) {
                 $datos = Restaurante::select(
                     'restaurantes.restaurante_id',
-                    'restaurantes.admin_id',
+                    'restaurantes.id',
                     'restaurantes.nombre',
                     'restaurantes.direccion',
                     'restaurantes.ciudad',
@@ -159,7 +161,7 @@ public function update(Request $request, $restaurante_id){
                     'restaurantes.telefono',
                     'restaurantes.imagen'
                 )
-                ->join('administracion_restaurante', 'restaurantes.admin_id', '=', 'administracion_restaurante.admin_id')
+                ->join('users', 'restaurantes.id', '=', 'users.id')
                 ->where('restaurantes.restaurante_id', '=', $restaurante_id)
                 ->first(); 
     
@@ -187,7 +189,7 @@ public function update(Request $request, $restaurante_id){
             if ($restaurante) {
                 $datos = Restaurante::select(
                     'restaurantes.restaurante_id',
-                    'restaurantes.admin_id',
+                    'restaurantes.id',
                     'restaurantes.nombre',
                     'restaurantes.direccion',
                     'restaurantes.ciudad',
@@ -200,7 +202,7 @@ public function update(Request $request, $restaurante_id){
                     'restaurantes.telefono',
                     'restaurantes.imagen'
                 )
-                ->join('administracion_restaurante', 'restaurantes.admin_id', '=', 'administracion_restaurante.admin_id')
+                ->join('users', 'restaurantes.id', '=', 'users.id')
                 ->where('restaurantes.restaurante_id', '=', $restaurante_id)
                 ->first(); 
     

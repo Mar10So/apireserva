@@ -25,22 +25,8 @@ use App\Http\Controllers\UserController;
 */
 
     Route::middleware('auth:sanctum')->group (function () { // De esta manera estan seguras las rutas de mi api
-            //Rutas para clientes
-        Route::get('/usuarios/select',[UsuariosController::class,'select']);
-        Route::post('/usuario/insertar',[UsuariosController::class,'insertar']);
-        Route::put('/usuario/update/{usuario_id}',[UsuariosController::class,'update']);
-        Route::delete('/usuario/delete',[UsuariosController::class,'delete']);
-        Route::get('/usuario/find{usuario_id}',[UsuariosController::class,'find']);
-
-        //Rutas para administrador de restaurantes
-        Route::get('/administrador/select',[AdministracionRestauranteController::class,'select']);
-        Route::post('/administrador/insertar',[AdministracionRestauranteController::class,'insertar']);
-        Route::put('/administrador/update/{admin_id}',[AdministracionRestauranteController::class,'update']);
-        Route::delete('/administrador/delete',[AdministracionRestauranteController::class,'delete']);
-        Route::get('/administrador/find2/{admin_id}',[AdministracionRestauranteController::class,'find2']);
-        Route::get('/administrador/find/{admin_id}',[AdministracionRestauranteController::class,'find']);
-
-
+ 
+    });
         //Rutas para los restaurantes
         Route::get('/restaurantes/select',[RestauranteController::class,'select']);
         Route::post('/restaurantes/insertar',[RestauranteController::class,'insertar']);
@@ -89,10 +75,6 @@ use App\Http\Controllers\UserController;
         Route::delete('/producto/delete/{producto_id}',[ProductoController::class,'delete']);
         Route::get('/producto/find2/{producto_id}',[ProductoController::class,'find2']);
         Route::get('/producto/find/{producto_id}',[ProductoController::class,'find']);
-
-
-    });
-
 
 //gestionar Usuarios
 Route::post('/usuario/register',[UserController::class,'register']);

@@ -33,7 +33,7 @@ class CalificacionesController extends Controller
             //Validar campos de la tabla calificaciones
             $validacion = Validator::make($request->all(),[
                 'calificacion_id' => 'required',
-                'usuario_id' => 'required',
+                'id' => 'required',
                 'restaurante_id' => 'required',
                 'calificacion' => 'required',
                 'comentario' => 'required',
@@ -63,7 +63,7 @@ class CalificacionesController extends Controller
             //validar campos requeridos
             $validacion = Validator::make($request->all(),[
                 'calificacion_id' => 'required',
-                'usuario_id' => 'required',
+                'id' => 'required',
                 'restaurante_id' => 'required',
                 'calificacion' => 'required',
                 'comentario' => 'required',
@@ -122,9 +122,11 @@ class CalificacionesController extends Controller
             //buscar calificaciones
             $calificaciones = Calificaciones::find($calificacion_id);
             if($calificaciones){
-                $datos = Calificaciones::select('calificaiones.calificacion_id','calificaciones.usuario_id','calificaciones.restaurante_id','calificaciones.restaurante_id','calificaciones.calificacion',
-                'calificaciones.comentario','calificaciones.fecha_calificacion')
-                ->join('usuarios','calificaciones.usuario_id','=','usuarios.usuario_id')
+                $datos = Calificaciones::select('calificaiones.calificacion_id','calificaciones.id',
+                'calificaciones.restaurante_id','calificaciones.restaurante_id','calificaciones.calificacion',
+                'calificaciones.comentario',
+                'calificaciones.fecha_calificacion')
+                ->join('users','calificaciones.id','=','users.id')
                 ->join('restaurantes','calificaciones.restaurnate_id','=','restaurantes.restaurante_id')
                 ->where('calificaciones.calificacion_id','=',$calificacion_id)
                 ->get();

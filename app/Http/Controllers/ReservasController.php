@@ -35,7 +35,7 @@ class ReservasController extends Controller
             //Validar campos de la tabla reservas
             $validacion = Validator::make($request->all(),[
                /*  'reserva_id' => 'required', */
-                'usuario_id' => 'required',
+                'id' => 'required',
                 'restaurante_id' => 'required',
                 'fecha_reserva' => 'required',
                 'hora_reserva' => 'required',
@@ -65,7 +65,7 @@ class ReservasController extends Controller
             //validar campos requeridos
             $validacion = Validator::make($request->all(),[
                 /* 'reserva_id' => 'required', */
-                'usuario_id' => 'required',
+                'id' => 'required',
                 'restaurante_id' => 'required',
                 'fecha_reserva' => 'required',
                 'hora_reserva' => 'required',
@@ -124,9 +124,9 @@ class ReservasController extends Controller
             //buscar usuario
             $reservas = Reservas::find($reserva_id);
             if($reservas){
-                $datos = Reservas::select('reservas.reserva_id','reserva.usuario_id','reservas.restaurante_id','reservas.fecha_reserva','reservas.numero_personas',
+                $datos = Reservas::select('reservas.reserva_id','reserva.id','reservas.restaurante_id','reservas.fecha_reserva','reservas.numero_personas',
                 'reservas.estado')
-                ->join('usuarios','reservas.usuario_id','=','usuarios.usuarios_id')
+                ->join('users','reservas.id','=','users.id')
                 ->join('restaurantes','reservas.resaturante_id','=','restaurantes.restaurante_id')
                 ->where('reservas.reserva_id','=', $reserva_id)
                 ->get();

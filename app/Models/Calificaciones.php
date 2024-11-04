@@ -9,5 +9,5 @@ class Calificaciones extends Model
 {
     use HasFactory;
     protected $table = 'Calificaiones';
-    protected $fillable = ['calificacion_id','usuario_id','restaurante_id','calificacion','fecha_calificacion'];
+    protected $fillable = ['calificacion_id','id','usuario_id','restaurante_id','calificacion','fecha_calificacion'];
 }
